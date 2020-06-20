@@ -49,8 +49,19 @@
 }
 
 - (void)awakeFromNib {
-	NSInteger defaultRow = [[NSSpeechSynthesizer availableVoices] indexOfObject:@"com.apple.speech.synthesis.voice.samantha.premium"];
-	NSIndexSet *indices = [NSIndexSet indexSetWithIndex:defaultRow];
+    
+    
+    NSArray<NSSpeechSynthesizerVoiceName> *possibleVoices = [NSSpeechSynthesizer availableVoices];
+    
+    NSInteger samanthaPremiumInt = [possibleVoices indexOfObject:@"com.apple.speech.synthesis.voice.samantha.premium"];
+    NSInteger defaultRow;
+    if (NSNotFound == samanthaPremiumInt) {
+        NSString *defaultIdentifier = [NSSpeechSynthesizer defaultVoice];
+        defaultRow = [possibleVoices indexOfObject:defaultIdentifier];
+    } else {
+        defaultRow = samanthaPremiumInt;
+    }
+    NSIndexSet *indices = [NSIndexSet indexSetWithIndex:defaultRow];
 	[_tableView selectRowIndexes:indices byExtendingSelection:NO];
 	[_tableView scrollRowToVisible:defaultRow];
 }
